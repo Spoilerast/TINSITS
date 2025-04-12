@@ -1,6 +1,4 @@
 namespace Monos.Scene
 {
-	internal sealed class PrismGhost : SceneObject
-	{
-	}
+internal sealed class PrismGhost : SceneObject {}
 }

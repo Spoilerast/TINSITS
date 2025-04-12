@@ -2,23 +2,19 @@
 
 namespace NotMonos.Databases
 {
-	internal sealed partial class ConnectionsDB
+internal sealed partial class ConnectionsDB
+{
+	private sealed class NetNode
 	{
-		private sealed class NetNode
-		{
-			private readonly HashSet<ushort> _linksIds;
+		private readonly HashSet<ushort> _linksIds;
 
-			public NetNode()
-				=> _linksIds = new(6);
+		public NetNode() { _linksIds = new(6); }
 
-			internal IEnumerable<ushort> Links
-				=> _linksIds;
+		internal IEnumerable<ushort> Links => _linksIds;
 
-			internal void Add(ushort linkId)
-				=> _linksIds.Add(linkId);
+		internal void Add(ushort linkId) { _linksIds.Add(linkId); }
 
-			internal void RemoveLink(ushort linkId)
-				=> _linksIds.Remove(linkId);
-		}
+		internal void RemoveLink(ushort linkId) { _linksIds.Remove(linkId); }
 	}
+}
 }

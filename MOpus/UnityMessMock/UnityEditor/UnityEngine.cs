@@ -65,13 +65,13 @@ public struct RaycastHit
 	internal Transform transform;
 }
 
-public struct Vector2
+public struct Vector2(float x, float y)
 {
 	internal float x;
 	internal float y;
 }
 
-public struct Vector3
+public struct Vector3(float x, float y, float z)
 {
 	internal static int back;
 	internal static int left;

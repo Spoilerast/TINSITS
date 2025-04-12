@@ -1,7 +1,7 @@
 namespace NotMonos.Entities
 {
-	internal sealed class PowerSource
-	{
-		internal float Channel—apacity { get; } //todo implement logic for this
-	}
+internal sealed class PowerSource
+{
+	internal float ChannelCapacity { get; } //todo implement logic for this
+}
 }

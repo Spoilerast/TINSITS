@@ -1,66 +1,54 @@
-using System;
-using Extensions;
-using Inputs;
 using UnityEngine;
 
 namespace Monos.Scene
 {
-	[RequireComponent(typeof(SphereCollider))]
-	internal sealed class StickObject : SceneObject //todo unfinished. suspended at current time 
+[RequireComponent(typeof(SphereCollider))]
+internal sealed class StickObject : SceneObject //todo unfinished. suspended at current time
+{
+	/*[SerializeField] private Transform _stickPosition;
+	private bool _isNotStickable;
+
+	private void OnMouseEnter() { CollisionEnter.SafeInvoke(); }
+
+	private void OnMouseExit() { CollisionExit.SafeInvoke(); }
+
+	//IDissalowCameraMove _camera;
+	//private void Start()
+	//{
+	//	_ = this.TryFindSingleInterface(out _camera);
+	//      }
+	/*private void OnTriggerEnter(Collider other)
 	{
-		[SerializeField] private Transform _stickPosition;
-		private bool _isNotStickable;
+		/*	if (UnityEngine.InputSystem.Gamepad.current.rightStick.magnitude is 0) //TODO
+				return;#2#
+		if (_isNotStickable)
+			return;
 
-		internal event Action CollisionEnter;
+		if (!other.gameObject.TryGetComponent(out ICameraPushable camera)
+			&& camera.IsPushable())
+			return;
 
-		internal event Action CollisionExit;
+		camera.PushCameraPivotTo(_stickPosition.position, 0.3f); //TODO: make stick duration customizable
+		PreventCollisionForTime();
+		CollisionEnter.SafeInvoke();
+	}#1#
 
-		private async void PreventCollisionForTime(float seconds = 1f)
-		{
-			_isNotStickable = true;
-			await Awaitable.WaitForSecondsAsync(seconds);
-			_isNotStickable = false;
-		}
+	private void OnTriggerExit(Collider other) { CollisionExit.SafeInvoke(); }
 
-		//IDissalowCameraMove _camera;
-		//private void Start()
-		//{
-		//	_ = this.TryFindSingleInterface(out _camera);
-		//      }
-		private void OnTriggerEnter(Collider other)
-		{
-			/*	if (UnityEngine.InputSystem.Gamepad.current.rightStick.magnitude is 0) //TODO
-					return;*/
-			if (_isNotStickable)
-				return;
+	internal event Action CollisionEnter;
 
-			if (!other.gameObject.TryGetComponent<ICameraPushable>(out var camera)
-				&& camera.IsPushable())
-				return;
+	internal event Action CollisionExit;
 
-			camera.PushCameraPivotTo(_stickPosition.position, 0.3f); //TODO: make stick duration customizable
-			PreventCollisionForTime();
-			CollisionEnter.SafeInvoke();			
-		}
-
-		private void OnTriggerExit(Collider other)
-		{
-			CollisionExit.SafeInvoke();
-		}
-
-		private void OnMouseEnter()
-		{
-			CollisionEnter.SafeInvoke();
-		}
-
-		private void OnMouseExit()
-		{
-			CollisionExit.SafeInvoke();
-		}
-	}
-
-	internal interface IStickObject
+	private async void PreventCollisionForTime(float seconds = 1f)
 	{
-		//abstract Vector3 Position { get; }
-	}
+		_isNotStickable = true;
+		await Awaitable.WaitForSecondsAsync(seconds);
+		_isNotStickable = false;
+	}*/
+}
+
+internal interface IStickObject
+{
+	//abstract Vector3 Position { get; }
+}
 }

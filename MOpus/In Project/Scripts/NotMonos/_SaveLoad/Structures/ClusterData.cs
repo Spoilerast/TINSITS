@@ -3,25 +3,27 @@ using UnityEngine;
 
 namespace NotMonos.SaveLoad
 {
-	[Serializable]
-	public struct ClusterData
+[Serializable]
+public struct ClusterData
+{
+	[SerializeField] public int axisPosX;
+	[SerializeField] public int axisPosZ;
+	[SerializeField] public byte type;
+	[SerializeField] public ushort[] ids;
+
+	public ClusterData(byte type, float axisX, float axisZ, ushort[] ids)
 	{
-		[SerializeField] private int _axis_pos_x;
-		[SerializeField] private int _axis_pos_z;
-		[SerializeField] private byte _type;
-		[SerializeField] private ushort[] _ids;
-
-		public ClusterData(byte type, float axis_x, float axis_z, ushort[] ids)
-			=> (_ids, _type, _axis_pos_x, _axis_pos_z) =
+		(this.ids, this.type, axisPosX, axisPosZ) =
 			(ids,
-			type,
-			ISerializedFloats.ToSerialized(axis_x),
-			ISerializedFloats.ToSerialized(axis_z));
-
-		internal readonly (byte type, float x, float z, ushort[] ids) GetData
-			=> (_type,
-			ISerializedFloats.FromSerialized(_axis_pos_x),
-			ISerializedFloats.FromSerialized(_axis_pos_z),
-			_ids);
+			 type,
+			 ISerializedFloats.ToSerialized(axisX),
+			 ISerializedFloats.ToSerialized(axisZ));
 	}
+
+	internal readonly (byte type, float x, float z, ushort[] ids) GetData
+		=> (type,
+			ISerializedFloats.FromSerialized(axisPosX),
+			ISerializedFloats.FromSerialized(axisPosZ),
+			ids);
+}
 }

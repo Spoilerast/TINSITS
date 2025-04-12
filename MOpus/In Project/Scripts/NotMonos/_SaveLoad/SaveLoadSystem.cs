@@ -2,96 +2,83 @@ using System;
 using System.IO;
 using Extensions;
 using NotMonos.Databases;
+using NotMonos.Processors;
 using UnityEngine;
 
 namespace NotMonos.SaveLoad
 {
-	internal sealed class SaveLoadSystem
+internal abstract class SaveLoadSystem
+{
+	private const string FileName = "Save000.json"; //todo make savefiles manager
+	private static bool _inProgress;
+	public static string DefaultSavePath => Application.persistentDataPath;
+	internal static void LoadSavefile() { InvokeOnlyOnceAtTime(LoadJsonData); }
+
+	internal static void SaveSavefile() { InvokeOnlyOnceAtTime(SaveJsonData); }
+
+	private static void InvokeOnlyOnceAtTime(Action method)
 	{
-		private readonly string _defaultPath = Application.persistentDataPath;
-		private const string FileName = "Save000.json";//todo make savefiles manager
-		private bool _inProgress = false;
+		if (_inProgress)
+			return;
 
-		public SaveLoadSystem()
-			=> PeekLogger.Log($"Save Path is {_defaultPath}");
+		_inProgress = true;
+		method.Invoke();
+		_inProgress = false;
+	}
 
-		internal void LoadSavefile()
-			=> InvokeOnlyOnceAtTime(LoadJsonData);
+	private static bool LoadFromFile(out string result)
+	{
+		result = "";
+		string fullPath = Path.Combine(DefaultSavePath, FileName);
 
-		internal void SaveSavefile()
-			=> InvokeOnlyOnceAtTime(SaveJsonData);
-
-		private void InvokeOnlyOnceAtTime(Action method)
-		{
-			if (_inProgress)
-				return;
-
-			_inProgress = true;
-			method.Invoke();
-			_inProgress = false;
+		try{
+			result = File.ReadAllText(fullPath); //todo make own class for IO
+			return true;
+		}
+		catch (FileNotFoundException fileNotFoundException){
+			PeekLogger.LogWarning($"Save file not found. {fileNotFoundException.Message}");
+		}
+		catch (Exception e){
+			PeekLogger.LogError($"Failed to read from {fullPath} with exception {e}");
 		}
 
-		private bool LoadFromFile(out string result)
-		{
-			result = "";
-			var fullPath = Path.Combine(_defaultPath, FileName);
+		return false;
+	}
 
-			try
-			{
-				result = File.ReadAllText(fullPath);//todo make own class for IO
-				return true;
-			}
-			catch (FileNotFoundException fnfex)
-			{
-				PeekLogger.LogWarning($"Save file not found. {fnfex.Message}");
-				return false;
-			}
-			catch (Exception e)
-			{
-				PeekLogger.LogError($"Failed to read from {fullPath} with exception {e}");
-				return false;
-			}
+	private static void LoadJsonData()
+	{
+		if (!LoadFromFile(out string json))
+			return;
+
+		SaveData sd = new(json);
+		bool condition = sd.saveVersion == Constants.CurrentSaveVersion;
+		if (PeekLogger.LogWarningForReturn(condition, "Save file version is not compatible. Load failed"))
+			return;
+
+		LoadProcessor.EmbodySaveData(sd);
+		//PeekLogger.ClearLog();
+		PeekLogger.LogTabTab("Load successful");
+	}
+
+	private static void SaveJsonData()
+	{
+		SaveData save = SaveProcessor.CreateSaveData();
+		if (WriteToFile(save.ToJson))
+			PeekLogger.LogTabTab("Save successful");
+	}
+
+	private static bool WriteToFile(string fileContents)
+	{
+		string fullPath = Path.Combine(DefaultSavePath, FileName);
+
+		try{
+			File.WriteAllText(fullPath, fileContents);
+			return true;
 		}
-
-		private void LoadJsonData()
-		{
-			if (!LoadFromFile(out var json))
-				return;
-
-			SaveData sd = new(json);
-			bool condition = sd.saveVersion == Constants.CurrentSaveVersion;
-			if (PeekLogger.LogWarningForReturn(condition, "Save file version is not compatible. Load failed"))
-				return;
-
-			Processors.LoadProcessor adapter = new();
-			adapter.EmbodySaveData(sd);
-			PeekLogger.LogTabTab("Load successful");
-		}
-
-		private void SaveJsonData()
-		{
-			Processors.SaveProcessor adapter = new();
-			SaveData save = adapter.CreateSaveData();
-			if (WriteToFile(save.ToJson))
-			{
-				PeekLogger.LogTabTab("Save successful");
-			}
-		}
-
-		private bool WriteToFile(string a_FileContents)
-		{
-			var fullPath = Path.Combine(_defaultPath, FileName);
-
-			try
-			{
-				File.WriteAllText(fullPath, a_FileContents);
-				return true;
-			}
-			catch (Exception e)
-			{
-				Debug.LogError($"Failed to write to {fullPath} with exception {e}");
-				return false;
-			}
+		catch (Exception e){
+			Debug.LogError($"Failed to write to {fullPath} with exception {e}");
+			return false;
 		}
 	}
+}
 }

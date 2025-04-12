@@ -1,38 +1,44 @@
 ﻿using System;
 using Extensions;
 using NotMonos;
+using NotMonos.Backstage;
 using NotMonos.Databases;
 using UnityEngine;
 
 namespace Monos.Scene
 {
-	public sealed class Nest : InteractableObject
+[RequireComponent(typeof(SphereCollider))]
+public sealed class Nest : InteractableObject
+{
+	internal event Action<GridPoint> OnPickedMove;
+
+	internal event Action<GridPoint> OnPickedSpawn;
+
+	/*internal void UnsubscribePicked()
 	{
-		internal string name;
+		OnPickedSpawn = null;
+		OnPickedMove = null;
+	}*/
 
-		internal event Action<GridPoint> OnPickedMove;
+	public override void DestroySceneObject()
+	{
+		OnPickedMove = null;
+		OnPickedSpawn = null;
+		Destroy();
+	}
 
-		internal event Action<GridPoint> OnPickedSpawn;
-
-		/*internal void UnsubscribePicked()
-		{
-			OnPickedSpawn = null;
-			OnPickedMove = null;
-		}*/
-
-		public override void DestroySceneObject()
-		{
-			OnPickedMove = null;
-			OnPickedSpawn = null;
-			Destroy();
-		}
-
-		internal override void Interact()
-		{
-			if (SceneGlobals.CurrentState == SceneState.SpawnMode) // instatiate prism to available Nest
+	internal override void Interact()
+	{
+		switch (SceneGlobals.CurrentState){
+			// instantiate prism to available Nest
+			case SceneState.SpawnMode:
 				OnPickedSpawn.SafeInvoke(PositionAsPoint);
-			else if (SceneGlobals.CurrentState == SceneState.PreviewMode) // pick Nests
-				OnPickedMove.SafeInvoke(PositionAsPoint);//todo maybe block invokation for previews scroll
+				return;
+			// pick Nests
+			case SceneState.PreviewMode:
+				OnPickedMove.SafeInvoke(PositionAsPoint); //todo maybe block invocation for previews scroll
+				return;
 		}
 	}
+}
 }

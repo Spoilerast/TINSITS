@@ -1,10 +1,11 @@
-﻿namespace Inputs
-{
-	internal sealed class InputsWrapper : Extensions.LazySingletonWrapperOf<InputActions>
-	{
-		private InputsWrapper()
-		{ }
+﻿using Extensions;
 
-		public static InputActions Actions => Instance;
-	}
+namespace Inputs
+{
+internal sealed class InputsWrapper : LazySingletonWrapperOf<InputActions>
+{
+	private InputsWrapper() {}
+
+	public static InputActions Actions => Instance;
+}
 }

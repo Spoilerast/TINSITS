@@ -1,6 +1,4 @@
 namespace Monos.Scene.Previews
 {
-	internal sealed class SuperClusterGhost : Preview
-	{
-	}
+internal sealed class SuperClusterGhost : Preview {}
 }
