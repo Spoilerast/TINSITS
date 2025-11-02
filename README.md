@@ -20,3 +20,9 @@
 
 ## So, is it fished or not?
 ### Definitely not. TINSITS itself, I believe, is in grayboxing stage. There are a lot of things to do. All production was concentrated on code base. And now I have pretty solid Core. Still, I have massive tech debt... When I developing this project - this project is developing me.
+
+## Lot of time passed without updates, are you still alive? Are project still alive?
+### Well, I am not sure is it living... TINSITS status is Suspended. Since May 2025 I working on new game.
+#### [YouTube EN](https://www.youtube.com/@PREPARATORENG/videos) - not much info about, sorry guys
+#### [YouTube RU](https://www.youtube.com/@ideal-games/videos) - more info about
+#### [Discord RU/EN](https://discord.gg/nzsuKqegTB) - you can find me here
