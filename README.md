@@ -26,3 +26,4 @@
 #### [YouTube EN](https://www.youtube.com/@PREPARATORENG/videos) - not much info about, sorry guys
 #### [YouTube RU](https://www.youtube.com/@ideal-games/videos) - more info about
 #### [Discord RU/EN](https://discord.gg/nzsuKqegTB) - you can find me here
+(not my channels)
